@@ -1,38 +1,64 @@
 # Log output app
 
+Turn the Dockerfile to an image:
+
+```bash
+docker build . -t log-output
+```
+
 Use local images with k3d:
+
 ```bash
-k3d image import log-output  
+k3d image import log-output
 ```
 
-Create a deployment(opens in a new tab) object with the image: 
+Create a deployment object with the image:
+
 ```bash
-kubectl create deployment log-output --image=fearlesslugia/log-output
+kubectl create deployment log-output --image=log-output
 ```
 
-List all objects of a resource: 
+Edit the deployment's `imagePullPolicy` from the default `Always` to `IfNotPresent`:
+
+```bash
+kubectl edit deployment log-output
+```
+
+```yaml
+containers:
+  - image: log-output
+    imagePullPolicy: IfNotPresent
+```
+
+Restart the deployment:
+
+```bash
+kubectl rollout restart deployment log-output
+```
+
+List all objects of a resource:
+
 ```bash
 log_output % kubectl get pods                                                     
-NAME                         READY   STATUS    RESTARTS   AGE
-log-output-5dfbd76df-skp2j   1/1     Running   0          6m17s
+NAME                          READY   STATUS    RESTARTS   AGE
+log-output-69d7fbd44b-qns9q   1/1     Running   0          3s
 ```
 
 See the output:
+
 ```bash
-log_output % kubectl logs -f log-output-5dfbd76df-skp2j 
+log_output % kubectl logs -f log-output-69d7fbd44b-qns9q
 
 > app1@1.0.0 start
 > node index.js
 
-2025-09-19T05:47:12.373Z: 8a013200-3f39-49ad-84c4-26ad28963e62
-2025-09-19T05:47:17.387Z: d3abcf56-d7ef-4e30-a85e-bd958e21ab2c
-2025-09-19T05:47:22.391Z: 5222cb6b-6b19-4c61-a516-755b03ed1c5c
-2025-09-19T05:47:27.401Z: 22029a15-64a2-4452-aa14-48b30e3c5f2b
-2025-09-19T05:47:32.405Z: eafab796-b689-4a27-93b3-03559c603679
-2025-09-19T05:47:37.417Z: 5b5ce3ca-f1bb-4313-98d4-44c9e7494d5e
-2025-09-19T05:47:42.425Z: 24d00eb9-75bf-40b9-b5df-73a84b587851
-2025-09-19T05:47:47.430Z: 9666c66d-16bc-4c8c-8422-2b22c809d522
-2025-09-19T05:47:52.439Z: 0126b2c6-3ff2-44dc-bcc0-86c66dd91ba1
-2025-09-19T05:47:57.458Z: 523c7a37-40d6-471c-8377-d69b585e1aa2
-2025-09-19T05:48:02.468Z: da63ae9e-80ea-45f9-8a61-dbb9702b0553
+2025-09-19T19:48:34.343Z: a28594b5-37ef-4523-bdca-c23e7f3a408e
+2025-09-19T19:48:39.351Z: 30695cca-3940-43da-beb0-b802b7a5ca41
+2025-09-19T19:48:44.356Z: f05f7962-d41c-43a5-bff7-5a8545e7fed5
+2025-09-19T19:48:49.364Z: cb3841ce-575e-4fa1-9212-7a999f6585cc
+2025-09-19T19:48:54.374Z: ecd1cf39-da74-4c42-8adc-4cc1a8c171da
+2025-09-19T19:48:59.377Z: 1f18adf9-ab6a-41c0-8a17-0de7294f2559
+2025-09-19T19:49:04.386Z: 7d6e08c9-40f9-4225-8375-b7091f86ab7b
+2025-09-19T19:49:09.396Z: e3272944-1fd9-40a2-a4a8-dd160e685405
+2025-09-19T19:49:14.403Z: 4b246d9f-cb21-4a26-a128-37ff5c0bd23a
 ```
