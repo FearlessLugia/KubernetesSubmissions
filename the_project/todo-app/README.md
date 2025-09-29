@@ -12,42 +12,42 @@ Use local images with k3d:
 k3d image import todo-app
 ```
 
-Create a deployment object with the image:
+Apply the deployment with `apply` command using declarative configuration with YAML:
 
 ```bash
-kubectl create deployment todo-app --image=todo-app
+kubectl apply -f manifests/deployment.yaml
 ```
 
 Edit the deployment's `imagePullPolicy` from the default `Always` to `IfNotPresent`:
 
 ```bash
-kubectl edit deployment todo-app
+kubectl edit deployment todo-app-dep
 ```
 
 ```yaml
 containers:
-  - image: todo-app
+  - image: todo-app-dep
     imagePullPolicy: IfNotPresent
 ```
 
 Restart the deployment:
 
 ```bash
-kubectl rollout restart deployment todo-app
+kubectl rollout restart deployment todo-app-dep
 ```
 
 List all objects of a resource:
 
 ```bash
 todo-app % kubectl get pods                                                     
-NAME                          READY   STATUS    RESTARTS   AGE
-todo-app-6c57b7d764-4m5ls     1/1     Running   0          3s
+NAME                              READY   STATUS    RESTARTS   AGE
+todo-app-dep-845b7f6d4c-jsgpg     1/1     Running   0          3s
 ```
 
 See the output:
 
 ```bash
- todo-app % kubectl logs -f todo-app-6c57b7d764-4m5ls
+ todo-app % kubectl logs -f todo-app-dep-845b7f6d4c-jsgpg
 
 > todo-app@1.0.0 start
 > node index.js
