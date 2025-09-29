@@ -8,6 +8,7 @@ My solution for DevOps with Kubernetes at the University of Helsinki
 
 - [1.1](https://github.com/FearlessLugia/KubernetesSubmissions/tree/1.1/log_output)
 - [1.2](https://github.com/FearlessLugia/KubernetesSubmissions/tree/1.2/the_project/todo-app)
+- [1.3](https://github.com/FearlessLugia/KubernetesSubmissions/tree/1.3/log_output)
 
 
 ## Course Link
